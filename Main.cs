@@ -36,7 +36,7 @@ namespace BDSN
         public bool enableNotifications = true;
         public string serverName = "Bonelab Server";
         public bool sendOnServerStart = true;
-        public bool sendOnServerStop = false;
+        public bool sendOnServerStop = true;
         public string webhookUsername = "BDSN Bot";
         public string webhookAvatarUrl = "https://support.discord.com/hc/user_images/PRywUXcqg0v5DD6s7C3LyQ.jpeg";
     }
@@ -260,7 +260,7 @@ namespace BDSN
 
                 try 
                 {
-                    SendDiscordMessage("BDSN");
+                    SendDiscordMessage("Server is up!");
                 }
                 catch (Exception ex)
                 {
