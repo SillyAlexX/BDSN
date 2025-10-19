@@ -46,6 +46,8 @@ namespace BDSN
         public static Page MainPage;
         private static BDSNConfig config;
         private static string configPath;
+        private static bool InServer = false;
+        private bool lastServerState = false;
 
         public override void OnInitializeMelon()
         {
@@ -219,7 +221,7 @@ namespace BDSN
                     string jsonPayload = JsonConvert.SerializeObject(payload);
                     byte[] data = Encoding.UTF8.GetBytes(jsonPayload);
 
-                    client.UploadData(config.webhookUrl, data);
+                    client.UploadDataAsync(new Uri(config.webhookUrl), data);
                     MelonLogger.Msg("Discord message sent successfully!");
                 }
             }
@@ -252,13 +254,31 @@ namespace BDSN
                 ShowTitleOnPopup = true
             };
             Notifier.Send(notification);
+        }
 
-            // Send Discord notification if enabled and configured
-            if (config.sendOnServerStart && config.enableNotifications && !string.IsNullOrEmpty(config.webhookUrl))
+        public static void HostBYEBYENOT() 
+        {
+            try
+            {
+                if (config.sendOnServerStop && config.enableNotifications && !string.IsNullOrEmpty(config.webhookUrl))
+                {
+                    SendDiscordMessage("Server is down!");
+                }
+
+            }
+            catch (Exception e)
+            {
+                MelonLogger.Error($"Error sending server stop message: {e.Message}");
+            }
+        }
+
+        public static void HostHELLONOT() 
+        {
+            if (config.sendOnServerStart && config.enableNotifications && !string.IsNullOrEmpty(config.webhookUrl) && InServer == true)
             {
                 if (!ValidateServerConnection()) return;
 
-                try 
+                try
                 {
                     SendDiscordMessage("Server is up!");
                 }
@@ -269,25 +289,28 @@ namespace BDSN
             }
         }
 
-        public override void OnApplicationQuit()
+        public override void OnUpdate() // Runs once per frame.
         {
-            // Send server stop notification if enabled
-            if (config.sendOnServerStop && config.enableNotifications && !string.IsNullOrEmpty(config.webhookUrl))
-            {
-                if (!ValidateServerConnection()) return;
+            bool currentServerState = NetworkInfo.HasServer;
 
-                try
-                {
-                    SendDiscordMessage($"{config.serverName} is going offline.");
-                }
-                catch (Exception ex)
-                {
-                    MelonLogger.Error($"Error sending server stop message: {ex.Message}");
-                }
+            // Detect disconnect (was true, now false)
+            if (lastServerState && !currentServerState)
+            {
+                InServer = false;
+                HostBYEBYENOT();
             }
+
+            // Detect connect (was false, now true)
+            if (!lastServerState && currentServerState)
+            {
+                InServer = true;
+                HostHELLONOT();
+            }
+
+            lastServerState = currentServerState;
         }
 
-        private bool ValidateServerConnection()
+        private static bool ValidateServerConnection()
         {
             if (!NetworkInfo.HasServer)
             {
