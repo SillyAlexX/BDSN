@@ -21,7 +21,7 @@ namespace BDSN
     public static class BuildInfo
     {
         public const string Name = "BDSN";
-        public const string Description = "A silly bone lab mod that uses webhooks to notify discord server when a bonelab server is up";
+        public const string Description = "My second silly bone lab mod that uses webhooks to notify discord server when a bonelab server is up";
         public const string Author = "SillyAlex";
         public const string Company = null;
         public const string Version = "1.0.0";
