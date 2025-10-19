@@ -16,11 +16,11 @@ using UnityEngine;
 using LabFusion;
 using LabFusion.Network;
 
-namespace BDSN
+namespace BLSN
 {
     public static class BuildInfo
     {
-        public const string Name = "BDSN";
+        public const string Name = "BLSN";
         public const string Description = "My second silly bone lab mod that uses webhooks to notify discord server when a bonelab server is up";
         public const string Author = "SillyAlex";
         public const string Company = null;
@@ -30,21 +30,21 @@ namespace BDSN
 
     // Configuration class
     [Serializable]
-    public class BDSNConfig
+    public class BLSNConfig
     {
         public string webhookUrl = "";
         public bool enableNotifications = true;
         public string serverName = "Bonelab Server";
         public bool sendOnServerStart = true;
         public bool sendOnServerStop = true;
-        public string webhookUsername = "BDSN Bot";
+        public string webhookUsername = "BLSN Bot";
         public string webhookAvatarUrl = "https://support.discord.com/hc/user_images/PRywUXcqg0v5DD6s7C3LyQ.jpeg";
     }
 
-    public class BDSN : MelonMod
+    public class BLSN : MelonMod
     {
         public static Page MainPage;
-        private static BDSNConfig config;
+        private static BLSNConfig config;
         private static string configPath;
         private static bool InServer = false;
         private bool lastServerState = false;
@@ -52,7 +52,7 @@ namespace BDSN
         public override void OnInitializeMelon()
         {
             // Set up config path
-            configPath = Path.Combine(MelonEnvironment.UserDataDirectory, "BDSN_Config.json");
+            configPath = Path.Combine(MelonEnvironment.UserDataDirectory, "BLSN_Config.json");
 
             // Load or create config
             LoadConfig();
@@ -63,7 +63,7 @@ namespace BDSN
             // Hook into level loading
             Hooking.OnLevelLoaded += OnLevelLoaded;
 
-            LoggerInstance.Msg("BDSN initialized!");
+            LoggerInstance.Msg("BLSN initialized!");
         }
 
         private void LoadConfig()
@@ -73,21 +73,21 @@ namespace BDSN
                 if (File.Exists(configPath))
                 {
                     string configJson = File.ReadAllText(configPath);
-                    config = JsonConvert.DeserializeObject<BDSNConfig>(configJson);
+                    config = JsonConvert.DeserializeObject<BLSNConfig>(configJson);
                     LoggerInstance.Msg("Config loaded successfully!");
                 }
                 else
                 {
                     // Create default config
-                    config = new BDSNConfig();
+                    config = new BLSNConfig();
                     SaveConfig();
-                    LoggerInstance.Msg("Default config created. Please edit BDSN_Config.json in your UserData folder!");
+                    LoggerInstance.Msg("Default config created. Please edit BLSN_Config.json in your UserData folder!");
                 }
             }
             catch (Exception ex)
             {
                 LoggerInstance.Error($"Error loading config: {ex.Message}");
-                config = new BDSNConfig(); // Use default config if loading fails
+                config = new BLSNConfig(); // Use default config if loading fails
             }
         }
 
@@ -117,7 +117,7 @@ namespace BDSN
 
                 var notification = new Notification
                 {
-                    Title = "BDSN Config Status",
+                    Title = "BLSN Config Status",
                     Message = $"{status}\nConfig file: {Path.GetFileName(configPath)}",
                     Type = string.IsNullOrEmpty(config.webhookUrl) ? NotificationType.Warning : NotificationType.Information,
                     PopupLength = 4f,
@@ -132,7 +132,7 @@ namespace BDSN
                 {
                     var notification = new Notification
                     {
-                        Title = "BDSN Error",
+                        Title = "BLSN Error",
                         Message = "Please configure your webhook URL first!",
                         Type = NotificationType.Error,
                         PopupLength = 3f,
@@ -142,7 +142,7 @@ namespace BDSN
                     return;
                 }
 
-                SendDiscordMessage("Test message from BDSN mod!");
+                SendDiscordMessage("Test message from BLSN mod!");
             });
 
             // Add reload config button
@@ -150,7 +150,7 @@ namespace BDSN
                 LoadConfig();
                 var notification = new Notification
                 {
-                    Title = "BDSN",
+                    Title = "BLSN",
                     Message = "Configuration reloaded!",
                     Type = NotificationType.Information,
                     PopupLength = 2f,
@@ -208,7 +208,7 @@ namespace BDSN
                                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
                                 footer = new
                                 {
-                                    text = "BDSN Mod v" + BuildInfo.Version
+                                    text = "BLSN Mod v" + BuildInfo.Version
                                 },
                                 thumbnail = new
                                 {
@@ -231,7 +231,7 @@ namespace BDSN
 
                 var notification = new Notification
                 {
-                    Title = "BDSN Error",
+                    Title = "BLSN Error",
                     Message = "Failed to send Discord message. Check console for details.",
                     Type = NotificationType.Error,
                     PopupLength = 4f,
@@ -245,10 +245,10 @@ namespace BDSN
         {
             var notification = new Notification
             {
-                Title = "BDSN | Ready",
+                Title = "BLSN | Ready",
                 Message = config.enableNotifications ?
-                    "BDSN is ready and notifications are enabled!" :
-                    "BDSN is ready but notifications are disabled.",
+                    "BLSN is ready and notifications are enabled!" :
+                    "BLSN is ready but notifications are disabled.",
                 Type = NotificationType.Success,
                 PopupLength = 3f,
                 ShowTitleOnPopup = true
