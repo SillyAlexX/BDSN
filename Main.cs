@@ -16,11 +16,11 @@ using UnityEngine;
 using LabFusion;
 using LabFusion.Network;
 
-namespace BLSN
+namespace BoneNotifier
 {
     public static class BuildInfo
     {
-        public const string Name = "BLSN";
+        public const string Name = "Bone Notifier";
         public const string Description = "My second silly bone lab mod that uses webhooks to notify discord server when a bonelab server is up";
         public const string Author = "SillyAlex";
         public const string Company = null;
@@ -30,21 +30,21 @@ namespace BLSN
 
     // Configuration class
     [Serializable]
-    public class BLSNConfig
+    public class BoneNotifierConfig
     {
         public string webhookUrl = "";
         public bool enableNotifications = true;
         public string serverName = "Bonelab Server";
         public bool sendOnServerStart = true;
         public bool sendOnServerStop = true;
-        public string webhookUsername = "BLSN Bot";
-        public string webhookAvatarUrl = "https://support.discord.com/hc/user_images/PRywUXcqg0v5DD6s7C3LyQ.jpeg";
+        public string webhookUsername = "Bone Notifier";
+        public string webhookAvatarUrl = "";
     }
 
-    public class BLSN : MelonMod
+    public class BoneNotifier : MelonMod
     {
         public static Page MainPage;
-        private static BLSNConfig config;
+        private static BoneNotifierConfig config;
         private static string configPath;
         private static bool InServer = false;
         private bool lastServerState = false;
@@ -52,7 +52,7 @@ namespace BLSN
         public override void OnInitializeMelon()
         {
             // Set up config path
-            configPath = Path.Combine(MelonEnvironment.UserDataDirectory, "BLSN_Config.json");
+            configPath = Path.Combine(MelonEnvironment.UserDataDirectory, "BoneNotifier_Config.json");
 
             // Load or create config
             LoadConfig();
@@ -63,7 +63,7 @@ namespace BLSN
             // Hook into level loading
             Hooking.OnLevelLoaded += OnLevelLoaded;
 
-            LoggerInstance.Msg("BLSN initialized!");
+            LoggerInstance.Msg("Bone Notifier initialized!");
         }
 
         private void LoadConfig()
@@ -73,21 +73,21 @@ namespace BLSN
                 if (File.Exists(configPath))
                 {
                     string configJson = File.ReadAllText(configPath);
-                    config = JsonConvert.DeserializeObject<BLSNConfig>(configJson);
+                    config = JsonConvert.DeserializeObject<BoneNotifierConfig>(configJson);
                     LoggerInstance.Msg("Config loaded successfully!");
                 }
                 else
                 {
                     // Create default config
-                    config = new BLSNConfig();
+                    config = new BoneNotifierConfig();
                     SaveConfig();
-                    LoggerInstance.Msg("Default config created. Please edit BLSN_Config.json in your UserData folder!");
+                    LoggerInstance.Msg("Default config created. Please edit BoneNotifier_Config.json in your UserData folder!");
                 }
             }
             catch (Exception ex)
             {
                 LoggerInstance.Error($"Error loading config: {ex.Message}");
-                config = new BLSNConfig(); // Use default config if loading fails
+                config = new BoneNotifierConfig(); // Use default config if loading fails
             }
         }
 
@@ -117,7 +117,7 @@ namespace BLSN
 
                 var notification = new Notification
                 {
-                    Title = "BLSN Config Status",
+                    Title = "BoneNotifier Config Status",
                     Message = $"{status}\nConfig file: {Path.GetFileName(configPath)}",
                     Type = string.IsNullOrEmpty(config.webhookUrl) ? NotificationType.Warning : NotificationType.Information,
                     PopupLength = 4f,
@@ -132,7 +132,7 @@ namespace BLSN
                 {
                     var notification = new Notification
                     {
-                        Title = "BLSN Error",
+                        Title = "BoneNotifier Error",
                         Message = "Please configure your webhook URL first!",
                         Type = NotificationType.Error,
                         PopupLength = 3f,
@@ -142,7 +142,7 @@ namespace BLSN
                     return;
                 }
 
-                SendDiscordMessage("Test message from BLSN mod!");
+                SendDiscordMessage("Test message from BoneNotifier!");
             });
 
             // Add reload config button
@@ -150,7 +150,7 @@ namespace BLSN
                 LoadConfig();
                 var notification = new Notification
                 {
-                    Title = "BLSN",
+                    Title = "BoneNotifier",
                     Message = "Configuration reloaded!",
                     Type = NotificationType.Information,
                     PopupLength = 2f,
@@ -208,7 +208,7 @@ namespace BLSN
                                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
                                 footer = new
                                 {
-                                    text = "BLSN Mod v" + BuildInfo.Version
+                                    text = "BoneNotifier Mod v" + BuildInfo.Version
                                 },
                                 thumbnail = new
                                 {
@@ -231,7 +231,7 @@ namespace BLSN
 
                 var notification = new Notification
                 {
-                    Title = "BLSN Error",
+                    Title = "BoneNotifier Error",
                     Message = "Failed to send Discord message. Check console for details.",
                     Type = NotificationType.Error,
                     PopupLength = 4f,
@@ -245,10 +245,10 @@ namespace BLSN
         {
             var notification = new Notification
             {
-                Title = "BLSN | Ready",
+                Title = "BoneNotifier | Ready",
                 Message = config.enableNotifications ?
-                    "BLSN is ready and notifications are enabled!" :
-                    "BLSN is ready but notifications are disabled.",
+                    "BoneNotifier is ready and notifications are enabled!" :
+                    "BoneNotifier is ready but notifications are disabled.",
                 Type = NotificationType.Success,
                 PopupLength = 3f,
                 ShowTitleOnPopup = true
