@@ -107,7 +107,7 @@ namespace BLSN
 
         private void SetupMenu()
         {
-            MainPage = Page.Root.CreatePage("<color=#7289DA>B</color><color=#6678B5>D</color><color=#5A6791>S</color><color=#4E566D>N</color>", Color.white, 0, true);
+            MainPage = Page.Root.CreatePage("<color=#7289DA>B</color><color=#6678B5>L</color><color=#5A6791>S</color><color=#4E566D>N</color>", Color.white, 0, true);
 
             // Add config status info
             MainPage.CreateFunction("Config Status", Color.cyan, () => {

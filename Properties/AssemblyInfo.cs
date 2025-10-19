@@ -1,15 +1,15 @@
 ﻿using System.Reflection;
 using MelonLoader;
 
-[assembly: AssemblyTitle(BDSN.BuildInfo.Description)]
-[assembly: AssemblyDescription(BDSN.BuildInfo.Description)]
-[assembly: AssemblyCompany(BDSN.BuildInfo.Company)]
-[assembly: AssemblyProduct(BDSN.BuildInfo.Name)]
-[assembly: AssemblyCopyright("Created by " + BDSN.BuildInfo.Author)]
-[assembly: AssemblyTrademark(BDSN.BuildInfo.Company)]
-[assembly: AssemblyVersion(BDSN.BuildInfo.Version)]
-[assembly: AssemblyFileVersion(BDSN.BuildInfo.Version)]
-[assembly: MelonInfo(typeof(BDSN.BDSN), BDSN.BuildInfo.Name, BDSN.BuildInfo.Version, BDSN.BuildInfo.Author, BDSN.BuildInfo.DownloadLink)]
+[assembly: AssemblyTitle(BLSN.BuildInfo.Description)]
+[assembly: AssemblyDescription(BLSN.BuildInfo.Description)]
+[assembly: AssemblyCompany(BLSN.BuildInfo.Company)]
+[assembly: AssemblyProduct(BLSN.BuildInfo.Name)]
+[assembly: AssemblyCopyright("Created by " + BLSN.BuildInfo.Author)]
+[assembly: AssemblyTrademark(BLSN.BuildInfo.Company)]
+[assembly: AssemblyVersion(BLSN.BuildInfo.Version)]
+[assembly: AssemblyFileVersion(BLSN.BuildInfo.Version)]
+[assembly: MelonInfo(typeof(BLSN.BLSN), BLSN.BuildInfo.Name, BLSN.BuildInfo.Version, BLSN.BuildInfo.Author, BLSN.BuildInfo.DownloadLink)]
 [assembly: MelonColor()]
 
 // Create and Setup a MelonGame Attribute to mark a Melon as Universal or Compatible with specific Games.
